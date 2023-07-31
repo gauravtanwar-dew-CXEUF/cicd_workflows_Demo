@@ -45,11 +45,18 @@ jobs:
     - name: Run Android Tests
       run: ./gradlew test
       # This action runs Android tests (for Android projects).
+      
+      
+    - name: Build Debug APK
+      run: ./gradlew assembleDebug
 
-    - name: Archive Artifact
+    - name: Archive APK
       uses: actions/upload-artifact@v3
-      # This action archives the built artifact, making it available for future steps and workflows.
-
+      
+      with:
+        name: debug-apk
+        path: app/build/outputs/apk/debug/*.apk
+      
   deploy:
     name: Deploy to Production
     runs-on: ubuntu-latest
