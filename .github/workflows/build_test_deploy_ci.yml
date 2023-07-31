@@ -42,6 +42,5 @@ jobs:
     - name: Archive APK
       uses: actions/upload-artifact@v3
       with:
-        arguments: build_v1
         name: sample_debug-apk
         path: app/build/outputs/apk/debug/*.apk
