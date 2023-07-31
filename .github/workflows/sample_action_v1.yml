@@ -88,4 +88,4 @@ jobs:
         git merge main --no-commit  # Merge changes from main into the other branch
 
         # Replace the following command with the command to push changes to the other branch
-        git push origin production_branch  # Replace with the name of the other 
+        git push origin production_branch  # Replace with the name of the other branch
