@@ -14,10 +14,10 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3 
 
     - name: Setup JDK 11
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v2.5.0
       with:
         java-version: '11'
 
@@ -32,6 +32,5 @@ jobs:
       with:
         name: debug-apk
         path: app/build/outputs/apk/debug/*.apk
-        # Add the distribution input as 'untracked'
         distribution: 'untracked'
 
