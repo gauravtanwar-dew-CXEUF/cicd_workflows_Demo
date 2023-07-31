@@ -42,7 +42,14 @@ jobs:
       
     - name: Build Debug APK
       run: ./gradlew assembleDebug
-      
+
+    - name: Archive APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: debug-apk
+        path: app/build/outputs/apk/debug/*.apk
+      # This action archives the built APK, making it available for future steps and workflows.
+
   deploy:
     name: Deploy to Production
     runs-on: ubuntu-latest
@@ -52,11 +59,10 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
 
     - name: Deploy to Dropbox
       run: |
- 
         ACCESS_TOKEN="sl.BjPpetrLAdauQTMDGx9RCbeRF-qwYetWCOcBts1jt7G4Q6pEQgUQ7Nm_xUNXVLx2uAB0TGPGdZW86iP1pnT2KrpjnvLoEswjIf8ciDeorVmk3anfx1CZC-b4QQdj1d5iVWZ9k9Juo5mC"
         UPLOAD_PATH="https://www.dropbox.com/home/Apps/CI_CD%20Production%20Server%20Sample"  # Replace with your desired folder in Dropbox
 
@@ -76,13 +82,5 @@ jobs:
         # Replace the following commands with the commands to update the other branch
         git checkout production_branch  # Replace with the name of the other branch
         git merge main --no-commit  # Merge changes from main into the other branch
-
         # Replace the following command with the command to push changes to the other branch
         git push origin production_branch  # Replace with the name of the other branch
-
-      
-      with:
-        name: debug-apk
-        path: app/build/outputs/apk/debug/*.apk
-      
- 
