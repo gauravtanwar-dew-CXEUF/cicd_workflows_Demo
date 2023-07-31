@@ -48,9 +48,6 @@ jobs:
 
     - name: Archive Artifact
       uses: actions/upload-artifact@v3
-      with:
-        name: built-artifact
-        path: path/to/built/artifact
       # This action archives the built artifact, making it available for future steps and workflows.
 
   deploy:
