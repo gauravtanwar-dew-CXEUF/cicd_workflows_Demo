@@ -5,7 +5,8 @@ name: Create Debug Build
 on:
   push:
     branches:
-      - main 
+      - main # Change this to your main branch name
+
 jobs:
   build:
     name: Build Debug APK
@@ -31,3 +32,6 @@ jobs:
       with:
         name: debug-apk
         path: app/build/outputs/apk/debug/*.apk
+        # Add the distribution input as 'untracked'
+        distribution: 'untracked'
+
