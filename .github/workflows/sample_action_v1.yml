@@ -48,6 +48,7 @@ jobs:
       with:
         name: debug-apk
         path: app/build/outputs/apk/debug/*.apk
+        distribution: 'none'
       # This action archives the built APK, making it available for future steps and workflows.
 
   deploy:
