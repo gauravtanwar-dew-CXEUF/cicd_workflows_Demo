@@ -47,7 +47,7 @@ jobs:
       # This action runs Android tests (for Android projects).
 
     - name: Archive Artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: built-artifact
         path: path/to/built/artifact
