@@ -16,6 +16,7 @@ import com.example.testapp1.databinding.ActivityNavigationBinding
 class NavigationActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+
     private lateinit var binding: ActivityNavigationBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
