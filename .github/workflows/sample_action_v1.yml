@@ -21,12 +21,19 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '17'
+        distribution: 'temurin'
 
-    - name: Install dependencies
-      run: npm install
+    - name: Grant execute permission for gradlew
+      run: chmod +x ./gradlew
 
-    - name: Build
-      run: ./gradlew build
+    - name: Build Debug APK
+      run: ./gradlew assembleDebug
+      
+    - name: Validate Gradle wrapper
+      uses: gradle/wrapper-validation-action@ccb4328a959376b642e027874838f60f8e596de3
+      
+    - name: Build with Gradle
+      uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629
 
     - name: Run Unit Tests
       run: npm test
@@ -43,18 +50,3 @@ jobs:
         name: sample_v1_debug-apk
         path: app/build/outputs/apk/debug/*.apk
         
-  deploy:
-    name: Update Other Branch
-    runs-on: ubuntu-latest
-
-    needs: build
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Update Other Branch
-      run: |
-        git checkout production_branch
-        git merge main --no-commit
-        git push origin production_branch
