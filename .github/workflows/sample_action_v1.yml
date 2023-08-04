@@ -42,8 +42,6 @@ jobs:
       with:
         name: debug-apk
         path: app/build/outputs/apk/debug/*.apk
-        # 'distribution' input should be here, under 'with'
-        distribution: 'none'
 
   deploy:
     name: Update Other Branch
