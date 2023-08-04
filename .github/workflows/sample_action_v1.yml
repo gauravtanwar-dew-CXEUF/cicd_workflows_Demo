@@ -6,12 +6,6 @@ on:
       - main
       - production_sample_branch_v1
       - regreesion_test_v2
-      
-  pull_request:
-    branches:
-      - main
-      - production_sample_branch_v1
-      - regreesion_test_v2
 
 jobs:
   build-test-deploy:
@@ -65,21 +59,10 @@ jobs:
     - name: Merge regreesion_test_v2 into production_sample_branch_v1
       run: |
         cd production_sample_branch_v1  # Change directory to the checked-out production branch
-        git merge regreesion_test_v2 -merged after test  # Merge changes from regreesion_test_v2 into the production_sample_branch_v1
+        git merge regreesion_test_v2 --no-commit  # Merge changes from regreesion_test_v2 into the production_sample_branch_v1
+
+    - name: Commit changes
+      run: git commit -m "Merge regreesion_test_v2 into production_sample_branch_v1"
 
     - name: Push changes
-      uses: actions/github-script@v4
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          const github = require('@actions/github');
-          const context = github.context;
-          const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
-
-          // Push changes to the production_branch
-          await octokit.git.updateRef({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            ref: 'heads/production_branch',
-            sha: context.sha
-          });
+      run: git push origin production_sample_branch_v1
