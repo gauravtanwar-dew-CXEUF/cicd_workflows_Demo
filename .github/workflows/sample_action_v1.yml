@@ -1,6 +1,5 @@
 name: Sample Action For CI/CD Workflow
 
-# Define the trigger for the workflow
 on:
   push:
     branches:
@@ -8,7 +7,11 @@ on:
       - production_sample_branch_v1
       - regreesion_test_v2
 
-# Define the jobs to be executed in the workflow
+permissions:
+  contents: 'read'
+  id-token: 'write'
+  issues: 'write'
+
 jobs:
   # Job for building, testing, and deploying APK
   build-test-deploy:
@@ -61,7 +64,8 @@ jobs:
 
     steps:
     # Step 1: Checkout the code from the repository
-    - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
     # Step 2: Merge regreesion_test_v2 -> production_sample_branch_v1
     - name: Merge regreesion_test_v2 -> production_sample_branch_v1
@@ -71,3 +75,4 @@ jobs:
         from_branch: regreesion_test_v2
         target_branch: production_sample_branch_v1
         github_token: ${{ secrets.GITHUB_TOKEN }}
+
