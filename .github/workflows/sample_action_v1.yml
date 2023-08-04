@@ -62,10 +62,10 @@ jobs:
         ref: production_sample_branch_v1
         path: production_sample_branch_v1  # The path where the branch will be checked out
 
-    - name: Merge regreesion_test_v2 into production_sample_branch
+    - name: Merge regreesion_test_v2 into production_sample_branch_v1
       run: |
-        cd production_sample_branch  # Change directory to the checked-out production branch
-        git merge regreesion_test_v2 -merged after test  # Merge changes from regreesion_test_v2 into the production_sample_branch
+        cd production_sample_branch_v1  # Change directory to the checked-out production branch
+        git merge regreesion_test_v2 -merged after test  # Merge changes from regreesion_test_v2 into the production_sample_branch_v1
 
     - name: Push changes
       uses: actions/github-script@v4
