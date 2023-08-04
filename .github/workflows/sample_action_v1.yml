@@ -4,13 +4,13 @@ on:
   push:
     branches:
       - main
-      - production_sample_branch
+      - production_sample_branch_v1
       - regreesion_test_v1
       
   pull_request:
     branches:
       - main
-      - production_sample_branch
+      - production_sample_branch_v1
       - regreesion_test_v1
 
 jobs:
@@ -59,8 +59,8 @@ jobs:
     - name: Checkout production Sample branch
       uses: actions/checkout@v3
       with:
-        ref: production_sample_branch
-        path: production_sample_branch  # The path where the branch will be checked out
+        ref: production_sample_branch_v1
+        path: production_sample_branch_v1  # The path where the branch will be checked out
 
     - name: Merge regreesion_test_v1 into production_sample_branch
       run: |
