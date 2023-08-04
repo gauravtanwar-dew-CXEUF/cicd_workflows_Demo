@@ -45,9 +45,7 @@ jobs:
         name: sample_debug-apk
         path: app/build/outputs/apk/debug/*.apk
 
-
   update-production:
-  
     name: Update Production Branch
     runs-on: ubuntu-latest
 
@@ -63,15 +61,9 @@ jobs:
     - name: Merge main into production_branch
       run: |
         cd production_branch  # Change directory to the checked-out production branch
-        git merge main -merged after test  # Merge changes from main into the production_branch
+        git merge main --no-commit  # Merge changes from main into the production_branch
         # Add any additional steps you may need for the merge process, such as resolving conflicts.
-
-    - name: Commit changes
-      uses: actions/commit@v1
-      with:
-        author_name: CI/CD Bot
-        author_email: cibot@example.com
-        message: "Merge changes from main into production_branch"
+        git commit -m "Merge changes from main into production_branch"
 
     - name: Push changes
       uses: actions/github-script@v4
