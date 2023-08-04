@@ -7,10 +7,7 @@ on:
       - production_sample_branch_v1
       - regreesion_test_v2
 
-permissions:
-  contents: 'read'
-  id-token: 'write'
-  issues: 'write'
+permissions: write-all
 
 jobs:
   # Job for building, testing, and deploying APK
@@ -69,7 +66,7 @@ jobs:
 
     # Step 2: Merge regreesion_test_v2 -> production_sample_branch_v1
     - name: Merge regreesion_test_v2 -> production_sample_branch_v1
-      uses: devmasx/merge-branch@main
+      uses: devmasx/merge-branch@master
       with:
         type: now
         from_branch: regreesion_test_v2
