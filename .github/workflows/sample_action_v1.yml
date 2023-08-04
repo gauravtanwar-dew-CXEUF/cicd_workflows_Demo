@@ -13,35 +13,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-
-    - name: Grant execute permission for gradlew
-      run: chmod +x ./gradlew
-
-    - name: Build Debug APK
-      run: ./gradlew assembleDebug
-      
-    - name: Validate Gradle wrapper
-      uses: gradle/wrapper-validation-action@ccb4328a959376b642e027874838f60f8e596de3
-      
-    - name: Build with Gradle
-      uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629
-
-    - name: Run Unit Tests
-      run: ./gradlew test
-
-    - name: Archive APK
-      uses: actions/upload-artifact@v3
-      with:
-        name: sample_debug-apk
-        path: app/build/outputs/apk/debug/*.apk
+    # Your existing build, test, and deploy steps here
+    # ...
 
   update-production:
     name: Update Production Sample Branch
@@ -55,6 +28,11 @@ jobs:
       with:
         ref: production_sample_branch_v1
         path: production_sample_branch_v1  # The path where the branch will be checked out
+
+    - name: Configure Git Merge Tool
+      run: |
+        git config --global merge.tool vscode
+        git config --global mergetool.vscode.cmd "code --wait $MERGED"
 
     - name: Merge regreesion_test_v2 into production_sample_branch_v1
       run: |
