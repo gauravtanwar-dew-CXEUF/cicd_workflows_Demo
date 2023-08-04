@@ -40,9 +40,9 @@ jobs:
     - name: Archive APK
       uses: actions/upload-artifact@v3
       with:
-        name: debug-apk
+        name: sample_v1_debug-apk
         path: app/build/outputs/apk/debug/*.apk
-
+        
   deploy:
     name: Update Other Branch
     runs-on: ubuntu-latest
