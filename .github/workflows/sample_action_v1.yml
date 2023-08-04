@@ -45,10 +45,47 @@ jobs:
         name: sample_debug-apk
         path: app/build/outputs/apk/debug/*.apk
 
-    - name: Update Other Branch
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  update-production:
+  
+    name: Update Production Branch
+    runs-on: ubuntu-latest
+
+    needs: build-test-deploy
+
+    steps:
+    - name: Checkout production branch
+      uses: actions/checkout@v2
+      with:
+        ref: production_branch
+        path: production_branch  # The path where the branch will be checked out
+
+    - name: Merge main into production_branch
       run: |
-        git checkout production_branch  # Replace with the name of the other branch
-        git merge main -m  # Merge changes from main into the other branch
-        git push origin production_branch  # Replace with the name of the other branch
+        cd production_branch  # Change directory to the checked-out production branch
+        git merge main -merged after test  # Merge changes from main into the production_branch
+        # Add any additional steps you may need for the merge process, such as resolving conflicts.
+
+    - name: Commit changes
+      uses: actions/commit@v1
+      with:
+        author_name: CI/CD Bot
+        author_email: cibot@example.com
+        message: "Merge changes from main into production_branch"
+
+    - name: Push changes
+      uses: actions/github-script@v4
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const github = require('@actions/github');
+          const context = github.context;
+          const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
+
+          // Push changes to the production_branch
+          await octokit.git.updateRef({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: 'heads/production_branch',
+            sha: context.sha
+          });
