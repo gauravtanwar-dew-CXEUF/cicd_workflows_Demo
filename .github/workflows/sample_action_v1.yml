@@ -64,7 +64,7 @@ jobs:
     - name: Merge regreesion_test_v2 into production_sample_branch_v1
       run: |
         cd production_sample_branch_v1  # Change directory to the checked-out production branch
-        git merge regreesion_test_v2 --no-commit  # Merge changes from regreesion_test_v2 into the production_sample_branch_v1
+        git merge origin/regreesion_test_v2 - merged after test  # Merge changes from regreesion_test_v2 into the production_sample_branch_v1
 
     - name: Commit changes
       run: git commit -m "Merge regreesion_test_v2 into production_sample_branch_v1"
