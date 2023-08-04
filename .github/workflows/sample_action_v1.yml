@@ -7,7 +7,7 @@ on:
       - production_sample_branch_v1
       - regreesion_test_v2
 
-permissions: write-all
+permissions: read-all|write-all
 
 jobs:
   # Job for building, testing, and deploying APK
