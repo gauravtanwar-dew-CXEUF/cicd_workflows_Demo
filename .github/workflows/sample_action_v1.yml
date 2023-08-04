@@ -46,22 +46,22 @@ jobs:
         path: app/build/outputs/apk/debug/*.apk
 
   update-production:
-    name: Update Production Branch
+    name: Update Production Sample Branch
     runs-on: ubuntu-latest
 
     needs: build-test-deploy
 
     steps:
-    - name: Checkout production branch
+    - name: Checkout production Sample branch
       uses: actions/checkout@v3
       with:
-        ref: production_branch
-        path: https://github.com/gauravtanwar-dew-CXEUF/cicd_workflows_Demo/tree/production_branch  # The path where the branch will be checked out
+        ref: production_sample_branch
+        path: https://github.com/gauravtanwar-dew-CXEUF/cicd_workflows_Demo/tree/production_sample_branch  # The path where the branch will be checked out
 
-    - name: Merge main into production_branch
+    - name: Merge regreesion_test_v1 into production_sample_branch
       run: |
-        cd production_branch  # Change directory to the checked-out production branch
-        git merge main -merged after test  # Merge changes from main into the production_branch
+        cd production_sample_branch  # Change directory to the checked-out production branch
+        git merge regreesion_test_v1 -merged after test  # Merge changes from regreesion_test_v1 into the production_sample_branch
 
     - name: Push changes
       uses: actions/github-script@v4
