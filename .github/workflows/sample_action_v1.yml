@@ -4,10 +4,14 @@ on:
   push:
     branches:
       - main
+      - production_sample_branch
+      - regreesion_test_v1
       
   pull_request:
     branches:
       - main
+      - production_sample_branch
+      - regreesion_test_v1
 
 jobs:
   build-test-deploy:
