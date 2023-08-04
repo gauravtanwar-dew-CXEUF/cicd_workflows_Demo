@@ -69,7 +69,7 @@ jobs:
 
     # Step 2: Merge regreesion_test_v2 -> production_sample_branch_v1
     - name: Merge regreesion_test_v2 -> production_sample_branch_v1
-      uses: devmasx/merge-branch@master
+      uses: devmasx/merge-branch@main
       with:
         type: now
         from_branch: regreesion_test_v2
