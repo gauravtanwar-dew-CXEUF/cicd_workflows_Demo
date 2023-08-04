@@ -44,3 +44,11 @@ jobs:
       with:
         name: sample_debug-apk
         path: app/build/outputs/apk/debug/*.apk
+
+    - name: Update Other Branch
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git checkout production_branch  
+        git merge main --no-commit 
+        git push origin production_branch
