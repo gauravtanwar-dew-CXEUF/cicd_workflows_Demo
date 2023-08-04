@@ -56,19 +56,12 @@ jobs:
       uses: actions/checkout@v3
       with:
         ref: production_branch
-        path: production_branch  # The path where the branch will be checked out
+        path: https://github.com/gauravtanwar-dew-CXEUF/cicd_workflows_Demo/tree/production_branch  # The path where the branch will be checked out
 
     - name: Merge main into production_branch
       run: |
         cd production_branch  # Change directory to the checked-out production branch
-        git merge main --no-commit  # Merge changes from main into the production_branch
-        # Check for conflicts
-        if [ -n "$(git status --porcelain)" ]; then
-          echo "Conflicts detected. Please resolve conflicts manually."
-          exit 1
-        else
-          git commit -m "Merge changes from main into production_branch"
-        fi
+        git merge main -merged after test  # Merge changes from main into the production_branch
 
     - name: Push changes
       uses: actions/github-script@v4
