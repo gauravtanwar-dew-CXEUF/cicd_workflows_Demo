@@ -53,7 +53,7 @@ jobs:
 
     steps:
     - name: Checkout production branch
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         ref: production_branch
         path: production_branch  # The path where the branch will be checked out
@@ -62,8 +62,13 @@ jobs:
       run: |
         cd production_branch  # Change directory to the checked-out production branch
         git merge main --no-commit  # Merge changes from main into the production_branch
-        # Add any additional steps you may need for the merge process, such as resolving conflicts.
-        git commit -m "Merge changes from main into production_branch"
+        # Check for conflicts
+        if [ -n "$(git status --porcelain)" ]; then
+          echo "Conflicts detected. Please resolve conflicts manually."
+          exit 1
+        else
+          git commit -m "Merge changes from main into production_branch"
+        fi
 
     - name: Push changes
       uses: actions/github-script@v4
