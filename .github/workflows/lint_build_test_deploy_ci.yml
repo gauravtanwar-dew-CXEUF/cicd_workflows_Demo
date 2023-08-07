@@ -1,0 +1,56 @@
+name: Build, Lint, and Analyze
+
+on:
+  push:
+    branches:
+      - main 
+  pull_request:
+    branches:
+      - main 
+
+jobs:
+  build-lint-analyze:
+    name: Build, Lint, and Analyze Debug APK
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x ./gradlew
+
+    - name: Build Debug APK
+      run: ./gradlew assembleDebug
+
+    # Step to perform lint checks on YAML files
+    - name: Lint YAML files
+      uses: dorny/paths-linter@v2
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        # Note: The paths-linter action does not require additional configuration for basic YAML linting.
+
+    # Step to validate the Gradle wrapper
+    - name: Validate Gradle wrapper
+      uses: gradle/wrapper-validation-action@ccb4328a959376b642e027874838f60f8e596de3
+
+    # Step to build the project with Gradle
+    - name: Build with Gradle
+      uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629
+
+    # Step to run unit tests
+    - name: Run Unit Tests
+      run: ./gradlew test
+
+    # Step to archive the APK
+    - name: Archive APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: debug-apk
+        path: app/build/outputs/apk/debug/*.apk
