@@ -1,4 +1,4 @@
-name: Build Test Deploy CI/CD Sample
+name: Lint Build Test Deploy CI/CD Sample
 
 on:
   push:
@@ -26,26 +26,9 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x ./gradlew
 
-    # Add linting step using the github/super-linter action
-    - name: Lint Android App
-      uses: github/super-linter@v3
-      with:
-        # Specify the GitHub token for accessing private repositories (optional if the repository is public)
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        # Exclude other file types and only perform Android app linting
-        excluded_linters: |
-          ansible-lint
-          cfn-lint
-          markdownlint
-          eslint
-          hadolint
-          php-cs-fixer
-          psscriptanalyzer
-          stylelint
-        # Add additional Android linting commands here (e.g., lintDebug, lintRelease, etc.)
-        lint_commands: |
-          ./gradlew lintDebug
-          ./gradlew lintRelease
+    # Step to run Android Lint
+    - name: Run Android Lint
+      run: ./gradlew lintDebug
 
     - name: Build Debug APK
       run: ./gradlew assembleDebug
