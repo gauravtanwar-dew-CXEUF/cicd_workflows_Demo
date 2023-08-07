@@ -1,16 +1,16 @@
-name: Build, Lint, and Analyze
+name: Build Test Deploy CI/CD Sample
 
 on:
   push:
     branches:
-      - main 
+      - main
   pull_request:
     branches:
-      - main 
+      - main
 
 jobs:
-  build-lint-analyze:
-    name: Build, Lint, and Analyze Debug APK
+  build-test-deploy:
+    name: Build, Test, and Deploy APK
     runs-on: ubuntu-latest
 
     steps:
@@ -26,31 +26,41 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x ./gradlew
 
+    # Add linting step using the github/super-linter action
+    - name: Lint Android App
+      uses: github/super-linter@v3
+      with:
+        # Specify the GitHub token for accessing private repositories (optional if the repository is public)
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        # Exclude other file types and only perform Android app linting
+        excluded_linters: |
+          ansible-lint
+          cfn-lint
+          markdownlint
+          eslint
+          hadolint
+          php-cs-fixer
+          psscriptanalyzer
+          stylelint
+        # Add additional Android linting commands here (e.g., lintDebug, lintRelease, etc.)
+        lint_commands: |
+          ./gradlew lintDebug
+          ./gradlew lintRelease
+
     - name: Build Debug APK
       run: ./gradlew assembleDebug
 
-    # Step to perform lint checks on YAML files
-    - name: Lint YAML files
-      uses: dorny/paths-linter@v2
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        # Note: The paths-linter action does not require additional configuration for basic YAML linting.
-
-    # Step to validate the Gradle wrapper
     - name: Validate Gradle wrapper
       uses: gradle/wrapper-validation-action@ccb4328a959376b642e027874838f60f8e596de3
 
-    # Step to build the project with Gradle
     - name: Build with Gradle
       uses: gradle/gradle-build-action@749f47bda3e44aa060e82d7b3ef7e40d953bd629
 
-    # Step to run unit tests
     - name: Run Unit Tests
       run: ./gradlew test
 
-    # Step to archive the APK
     - name: Archive APK
       uses: actions/upload-artifact@v3
       with:
-        name: debug-apk
+        name: sample_debug-apk
         path: app/build/outputs/apk/debug/*.apk
