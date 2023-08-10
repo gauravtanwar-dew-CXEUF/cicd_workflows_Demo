@@ -24,6 +24,13 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
+        /**
+         *
+         *test v2
+         *
+         * */
+
+
         setSupportActionBar(binding.toolbar)
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
