@@ -1,4 +1,4 @@
-name: Create  Release Build APKs
+name: Build Release APKs
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: Build APKs
+    name: Build Debug and Release APKs
     runs-on: ubuntu-latest
 
     steps:
@@ -22,10 +22,18 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-        
+
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
-        
+
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug
+
+      - name: Archive Debug APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: debug-apk
+          path: app/build/outputs/apk/debug/*.apk
 
       - name: Build Release APK
         run: ./gradlew assembleRelease
@@ -35,12 +43,3 @@ jobs:
         with:
           name: release-apk
           path: app/build/outputs/apk/release/*.apk
-
-      - name: Build Debug APK
-        run: ./gradlew assembleDebug
-
-      - name: Archive Debug APK
-        uses: actions/upload-artifact@v2
-        with:
-          name: debug-apk
-          path: app/build/outputs/apk/debug/*.apk
