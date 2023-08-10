@@ -1,4 +1,4 @@
-name: Build APKs
+name: Create Release Build APKs
 
 on:
   push:
