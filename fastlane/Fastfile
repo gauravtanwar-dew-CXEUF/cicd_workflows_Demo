@@ -1,41 +1,15 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
-
 default_platform(:android)
 
 platform :android do
-  desc "Runs all the tests"
-  echo "error message 1"
-  lane :test do
-    gradle(task: "test")
+  lane :build_debug do
+    gradle(task: "assembleDebug")
   end
 
-  desc "Submit a new Beta Build to Crashlytics Beta"
-  echo "error message 2"
-  lane :beta do
-    gradle(task: "clean assembleRelease")
-    crashlytics
-  
-    # sh "your_script.sh"
-    # You can also use other beta testing services here
+  lane :run_tests do
+    gradle(task: "testDebug")
   end
 
-  desc "Deploy a new version to the Google Play"
-  echo "error message 3"
-  lane :deploy do
-    gradle(task: "clean assembleRelease")
-    upload_to_play_store
+  lane :lint_check do
+    gradle(task: "lint")
   end
 end
