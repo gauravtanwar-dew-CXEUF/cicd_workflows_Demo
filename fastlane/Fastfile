@@ -17,11 +17,13 @@ default_platform(:android)
 
 platform :android do
   desc "Runs all the tests"
+  echo "error message 1"
   lane :test do
     gradle(task: "test")
   end
 
   desc "Submit a new Beta Build to Crashlytics Beta"
+  echo "error message 2"
   lane :beta do
     gradle(task: "clean assembleRelease")
     crashlytics
@@ -31,6 +33,7 @@ platform :android do
   end
 
   desc "Deploy a new version to the Google Play"
+  echo "error message 3"
   lane :deploy do
     gradle(task: "clean assembleRelease")
     upload_to_play_store
