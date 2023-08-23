@@ -1,33 +1,30 @@
 default_platform(:android)
 
 platform :android do
-
-  lane :build do
-    gradle(
-      task: 'assembleDebug',
-      project_dir: './app'
-    )
+  lane :build_debug do
+    gradle(task: "assembleDebug")
   end
 
-  lane :test do
-    gradle(
-      task: 'test',
-      project_dir: './app'
-    )
+  lane :run_tests do
+    gradle(task: "testDebug")
   end
 
-  lane :lint do
-    sh 'gradlew lint'
+  lane :lint_check do
+    gradle(task: "lint")
   end
 
   lane :release_build do
-    gradle(
-      task: 'assembleRelease',
-      project_dir: './app'
-    )
+    gradle(task: "assembleRelease")
   end
 
+  lane :all_in_one do
+    build_debug
+    run_tests
+    lint_check
+    release_build
+  end
 end
+
 
 
 
