@@ -48,12 +48,12 @@ platform :android do
 
     # Construct the API parameters
     api_params = {
-      projects: 'YourProject',
+      projects: 'com.example.testapp1',
       envs: 'QA',
       platforms: 'ANDROID',
       buildVersion: '1.0.0',
       buildNo: '1',
-      bundleId: 'com.example.app',
+      bundleId: 'com.example.testapp1',
       changeset: 'Test CS',
       codebranch: 'Test CB',
       comments: 'Test CM'
