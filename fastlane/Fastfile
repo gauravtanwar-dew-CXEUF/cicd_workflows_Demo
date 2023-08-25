@@ -23,6 +23,50 @@ platform :android do
     lint_check
     release_build
   end
+
+  lane :upload_to_custom_server do
+    UI.message("Uploading APK to Custom Server")
+
+    # Path to the APK
+    apk_path = lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]
+
+    # Set your API endpoint URL
+    api_url = "https://deploy.dewapps.com/api/uploadBuild"
+
+    # Set Basic Authentication headers
+    headers = {
+      "Authorization" => "Basic " + Base64.strict_encode64("upload-admin:bUild@uPloAD"),
+      "Content-Type" => "multipart/form-data; boundary=<calculated when request is sent>",
+      "Content-Length" => "<calculated when request is sent>",
+      "Host" => "<calculated when request is sent>",
+      "User-Agent" => "PostmanRuntime/7.32.3",
+      "Accept" =>"*/*",
+      "Accept-Encoding" => "gzip, deflate, br",
+      "Connection" => "keep-alive"
+    }
+
+    # Set body parameters as a hash
+    body_params = {
+      "projects" => "1:::Test2",
+      "envs" => "QA",
+      "platforms" => "ANDROID",
+      "buildVersion" => "1.0.0",
+      "buildNo" => "1",
+      "bundleId" => "1",
+      "changeset" => "Test CS",
+      "codebranch" => "Test CB",
+      "comments" => "Test CM",
+    }
+
+    # Convert body parameters to JSON string
+    request_body = body_params.to_json
+
+    # Use curl to upload the APK to the server and capture the response
+    response = sh("curl -X POST -H '#{headers.map { |k, v| "#{k}: #{v}" }.join("' -H '")}' -d '#{request_body}' --form file=@'#{apk_path}' '#{api_url}'", print_command: false, print_command_output: false).strip
+    UI.message("API Response:\n#{response}")
+  end
+
+
 end
 
 
