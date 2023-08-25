@@ -25,21 +25,8 @@ platform :android do
   end
 
   lane :upload_to_custom_server do
-    # Build your APK or obtain the path to the APK
-    apk_path = lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH] || ENV['APK_PATH'] || 'app/build/outputs/apk/debug/app-debug.apk'
-
-    # Define API parameters
-    api_params = {
-      projects: 'YourProject',
-      envs: 'QA',
-      platforms: 'ANDROID',
-      buildVersion: '1.0.0',
-      buildNo: '1',
-      bundleId: 'com.example.app',
-      changeset: 'Test CS',
-      codebranch: 'Test CB',
-      comments: 'Test CM'
-    }
+    # Construct the path to the generated APK within your workspace
+    apk_path = File.join(ENV['WORKSPACE'], 'app/build/outputs/apk/debug/app-debug.apk')
 
     # Set your API endpoint URL
     api_url = "https://deploy.dewapps.com/api/uploadBuild"
@@ -56,24 +43,85 @@ platform :android do
       "Connection" => "keep-alive"
     }
 
-    # Make API request with headers and APK file
-    response = sh(
-      script: "curl -X POST '#{api_url}'",
-      "-H '#{headers['Authorization']}'",
-      "-H '#{headers['Content-Type']}'",
-      "-H '#{headers['Content-Length']}'",
-      "-H '#{headers['Host']}'",
-      "-H '#{headers['User-Agent']}'",
-      "-H '#{headers['Accept']}'",
-      "-H '#{headers['Accept-Encoding']}'",
-      "-H '#{headers['Connection']}'",
-      "-F 'file=@#{apk_path}'",
-      "-d '#{api_params.to_json}'",
-      returnStdout: true
-    )
+    # Construct the headers string
+    headers_string = headers.map { |key, value| "-H '#{key}: #{value}'" }.join(' ')
 
+    # Construct the API parameters
+    api_params = {
+      projects: 'YourProject',
+      envs: 'QA',
+      platforms: 'ANDROID',
+      buildVersion: '1.0.0',
+      buildNo: '1',
+      bundleId: 'com.example.app',
+      changeset: 'Test CS',
+      codebranch: 'Test CB',
+      comments: 'Test CM'
+    }
+
+    # Construct the command
+    command = "curl -X POST #{headers_string} -d '#{api_params.to_json}' -F file=@'#{apk_path}' '#{api_url}'"
+
+    # Execute the command using sh
+    response = sh(command)
+
+    # Print the API response
     puts "API Response: #{response}"
+
+    # Rest of your script...
   end
+
+
+#   lane :upload_to_custom_server do
+#     # Build your APK or obtain the path to the APK
+#     apk_path = lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH] || ENV['APK_PATH'] || 'app/build/outputs/apk/debug/app-debug.apk'
+#
+#     # Define API parameters
+#     api_params = {
+#       projects: 'YourProject',
+#       envs: 'QA',
+#       platforms: 'ANDROID',
+#       buildVersion: '1.0.0',
+#       buildNo: '1',
+#       bundleId: 'com.example.app',
+#       changeset: 'Test CS',
+#       codebranch: 'Test CB',
+#       comments: 'Test CM'
+#     }
+#
+#     # Set your API endpoint URL
+#     api_url = "https://deploy.dewapps.com/api/uploadBuild"
+#
+#     # Set Basic Authentication headers
+#     headers = {
+#       "Authorization" => "Basic " + Base64.strict_encode64("upload-admin:bUild@uPloAD"),
+#       "Content-Type" => "multipart/form-data; boundary=<calculated when request is sent>",
+#       "Content-Length" => "<calculated when request is sent>",
+#       "Host" => "<calculated when request is sent>",
+#       "User-Agent" => "PostmanRuntime/7.32.3",
+#       "Accept" => "*/*",
+#       "Accept-Encoding" => "gzip, deflate, br",
+#       "Connection" => "keep-alive"
+#     }
+#
+#     # Make API request with headers and APK file
+#     response = sh(
+#       script: "curl -X POST '#{api_url}'",
+#       "-H '#{headers['Authorization']}'",
+#       "-H '#{headers['Content-Type']}'",
+#       "-H '#{headers['Content-Length']}'",
+#       "-H '#{headers['Host']}'",
+#       "-H '#{headers['User-Agent']}'",
+#       "-H '#{headers['Accept']}'",
+#       "-H '#{headers['Accept-Encoding']}'",
+#       "-H '#{headers['Connection']}'",
+#       "-F 'file=@#{apk_path}'",
+#       "-d '#{api_params.to_json}'",
+#       returnStdout: true
+#     )
+#
+#     puts "API Response: #{response}"
+#   end
 
 
 end
