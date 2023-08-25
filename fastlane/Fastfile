@@ -45,7 +45,6 @@ platform :android do
       "Connection" => "keep-alive"
     }
 
-    # Set body parameters as a hash
     body_params = {
       "projects" => "1:::Test2",
       "envs" => "QA",
@@ -55,15 +54,17 @@ platform :android do
       "bundleId" => "1",
       "changeset" => "Test CS",
       "codebranch" => "Test CB",
-      "comments" => "Test CM",
+      "comments" => "Test CM"
     }
 
     # Convert body parameters to JSON string
     request_body = body_params.to_json
 
-    # Use curl to upload the APK to the server and capture the response
-    response = sh("curl -X POST -H '#{headers.map { |k, v| "#{k}: #{v}" }.join("' -H '")}' -d '#{request_body}' --form file=@'#{apk_path}' '#{api_url}'", print_command: false, print_command_output: false).strip
+    # Use curl to upload the APK and send JSON data to the server
+    response = sh("curl -X POST -H '#{headers.map { |k, v| "#{k}: #{v}" }.join("' -H '")}' -H 'Content-Type: application/json' -d '#{request_body}' -F file=@'#{apk_path}' '#{api_url}'", print_command: false, print_command_output: false).strip
     UI.message("API Response:\n#{response}")
+
+
   end
 
 
