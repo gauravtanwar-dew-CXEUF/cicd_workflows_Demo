@@ -35,7 +35,7 @@ platform :android do
 
     # Set Basic Authentication headers
     headers = {
-      "Authorization" => "Basic dXBsb2FkLWFkbWluOmJVaWxkQHVQbG9BRA==",
+      "Authorization" => "Basic " + Base64.strict_encode64("upload-admin:bUild@uPloAD"),
       "Content-Type" => "multipart/form-data; boundary=<calculated when request is sent>",
       "Content-Length" => "<calculated when request is sent>",
       "Host" => "<calculated when request is sent>",
@@ -61,10 +61,8 @@ platform :android do
     request_body = body_params.to_json
 
     # Use curl to upload the APK and send JSON data to the server
-    response = sh("curl -X POST -H '#{headers.map { |k, v| "#{k}: #{v}" }.join("' -H '")}' -H 'Content-Type: application/json' -d '#{request_body}' -F file=@'#{apk_path}' '#{api_url}'", print_command: false, print_command_output: false).strip
-    UI.message("API Response:\n#{response}")
-
-
+      response = sh("curl -X POST -H '#{headers.map { |k, v| "#{k}: #{v}" }.join("' -H '")}' -H 'Content-Type: application/json' -d '#{request_body}' -F file=@'#{apk_path}' '#{api_url}'", print_command: false, print_command_output: false).strip
+      UI.message("API Response:\n#{response}")
   end
 
 
