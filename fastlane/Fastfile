@@ -25,10 +25,21 @@ platform :android do
   end
 
   lane :upload_to_custom_server do
-    UI.message("Uploading APK to Custom Server")
+    # Build your APK or obtain the path to the APK
+    apk_path = lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH] || ENV['APK_PATH'] || 'app/build/outputs/apk/debug/app-debug.apk'
 
-    # Path to the APK
-    apk_path = lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]
+    # Define API parameters
+    api_params = {
+      projects: 'YourProject',
+      envs: 'QA',
+      platforms: 'ANDROID',
+      buildVersion: '1.0.0',
+      buildNo: '1',
+      bundleId: 'com.example.app',
+      changeset: 'Test CS',
+      codebranch: 'Test CB',
+      comments: 'Test CM'
+    }
 
     # Set your API endpoint URL
     api_url = "https://deploy.dewapps.com/api/uploadBuild"
@@ -40,29 +51,28 @@ platform :android do
       "Content-Length" => "<calculated when request is sent>",
       "Host" => "<calculated when request is sent>",
       "User-Agent" => "PostmanRuntime/7.32.3",
-      "Accept" =>"*/*",
+      "Accept" => "*/*",
       "Accept-Encoding" => "gzip, deflate, br",
       "Connection" => "keep-alive"
     }
 
-    body_params = {
-      "projects" => "1:::Test2",
-      "envs" => "QA",
-      "platforms" => "ANDROID",
-      "buildVersion" => "1.0.0",
-      "buildNo" => "1",
-      "bundleId" => "1",
-      "changeset" => "Test CS",
-      "codebranch" => "Test CB",
-      "comments" => "Test CM"
-    }
+    # Make API request with headers and APK file
+    response = sh(
+      script: "curl -X POST '#{api_url}'",
+      "-H '#{headers['Authorization']}'",
+      "-H '#{headers['Content-Type']}'",
+      "-H '#{headers['Content-Length']}'",
+      "-H '#{headers['Host']}'",
+      "-H '#{headers['User-Agent']}'",
+      "-H '#{headers['Accept']}'",
+      "-H '#{headers['Accept-Encoding']}'",
+      "-H '#{headers['Connection']}'",
+      "-F 'file=@#{apk_path}'",
+      "-d '#{api_params.to_json}'",
+      returnStdout: true
+    )
 
-    # Convert body parameters to JSON string
-    request_body = body_params.to_json
-
-    # Use curl to upload the APK and send JSON data to the server
-      response = sh("curl -X POST -H '#{headers.map { |k, v| "#{k}: #{v}" }.join("' -H '")}' -H 'Content-Type: application/json' -d '#{request_body}' -F file=@'#{apk_path}' '#{api_url}'", print_command: false, print_command_output: false).strip
-      UI.message("API Response:\n#{response}")
+    puts "API Response: #{response}"
   end
 
 
