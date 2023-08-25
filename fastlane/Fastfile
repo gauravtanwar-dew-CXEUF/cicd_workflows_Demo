@@ -34,9 +34,6 @@ platform :android do
     # Set Basic Authentication headers
     headers = {
       "Authorization" => "Basic " + Base64.strict_encode64("upload-admin:bUild@uPloAD"),
-      "Content-Type" => "multipart/form-data; boundary=<calculated when request is sent>",
-      "Content-Length" => "<calculated when request is sent>",
-      "Host" => "<calculated when request is sent>",
       "User-Agent" => "PostmanRuntime/7.32.3",
       "Accept" => "*/*",
       "Accept-Encoding" => "gzip, deflate, br",
@@ -48,19 +45,26 @@ platform :android do
 
     # Construct the API parameters
     api_params = {
-      projects: 'com.example.testapp1',
+      projects: 'YourProject',
       envs: 'QA',
       platforms: 'ANDROID',
       buildVersion: '1.0.0',
       buildNo: '1',
-      bundleId: 'com.example.testapp1',
+      bundleId: 'com.example.app',
       changeset: 'Test CS',
       codebranch: 'Test CB',
       comments: 'Test CM'
     }
 
     # Construct the command
-    command = "curl -X POST #{headers_string} -d '#{api_params.to_json}' -F file=@'#{apk_path}' '#{api_url}'"
+    command = "curl -X POST #{headers_string} -F file=@'#{apk_path}'"
+
+    # Add API parameters as form fields
+    api_params.each do |key, value|
+      command += " -F '#{key}=#{value}'"
+    end
+
+    command += " '#{api_url}'"
 
     # Execute the command using sh
     response = sh(command)
@@ -70,6 +74,53 @@ platform :android do
 
     # Rest of your script...
   end
+
+
+#   lane :upload_to_custom_server do
+#     # Construct the path to the generated APK within your workspace
+#     apk_path = File.join(ENV['WORKSPACE'], 'app/build/outputs/apk/debug/app-debug.apk')
+#
+#     # Set your API endpoint URL
+#     api_url = "https://deploy.dewapps.com/api/uploadBuild"
+#
+#     # Set Basic Authentication headers
+#     headers = {
+#       "Authorization" => "Basic " + Base64.strict_encode64("upload-admin:bUild@uPloAD"),
+#       "Content-Type" => "multipart/form-data; boundary=<calculated when request is sent>",
+#       "Content-Length" => "<calculated when request is sent>",
+#       "Host" => "<calculated when request is sent>",
+#       "User-Agent" => "PostmanRuntime/7.32.3",
+#       "Accept" => "*/*",
+#       "Accept-Encoding" => "gzip, deflate, br",
+#       "Connection" => "keep-alive"
+#     }
+#
+#     # Construct the headers string
+#     headers_string = headers.map { |key, value| "-H '#{key}: #{value}'" }.join(' ')
+#
+#     # Construct the API parameters
+#     api_params = {
+#       projects: 'com.example.testapp1',
+#       envs: 'QA',
+#       platforms: 'ANDROID',
+#       buildVersion: '1.0.0',
+#       buildNo: '1',
+#       bundleId: 'com.example.testapp1',
+#       changeset: 'Test CS',
+#       codebranch: 'Test CB',
+#       comments: 'Test CM'
+#     }
+#
+#     # Construct the command
+#     command = "curl -X POST #{headers_string} -F '#{api_params.to_json}' -F file=@'#{apk_path}' '#{api_url}'"
+#     # Execute the command using sh
+#     response = sh(command)
+#
+#     # Print the API response
+#     puts "API Response: #{response}"
+#
+#     # Rest of your script...
+#   end
 
 
 #   lane :upload_to_custom_server do
