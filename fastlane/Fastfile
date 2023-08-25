@@ -35,7 +35,7 @@ platform :android do
 
     # Set Basic Authentication headers
     headers = {
-      "Authorization" => "Basic " + Base64.strict_encode64("upload-admin:bUild@uPloAD"),
+      "Authorization" => "Basic dXBsb2FkLWFkbWluOmJVaWxkQHVQbG9BRA==",
       "Content-Type" => "multipart/form-data; boundary=<calculated when request is sent>",
       "Content-Length" => "<calculated when request is sent>",
       "Host" => "<calculated when request is sent>",
