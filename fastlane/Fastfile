@@ -26,7 +26,9 @@ platform :android do
 
   lane :upload_to_custom_server do
     # Construct the path to the generated APK within your workspace
-    apk_path = File.join(ENV['WORKSPACE'], 'app/build/outputs/apk/debug/app-debug.apk')
+    #apk_path = File.join(ENV['WORKSPACE'], 'app/build/outputs/apk/debug/app-debug.apk')
+
+    apk = "/var/lib/jenkins/jobs/ci-cd-android-demo-v4/builds/26/archive/app/build/outputs/apk/debug"
 
     # Set your API endpoint URL
     api_url = "https://deploy.dewapps.com/api/uploadBuild"
