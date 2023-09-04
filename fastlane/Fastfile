@@ -43,10 +43,11 @@ platform :android do
     # Set Basic Authentication headers
     headers = {
       "Authorization" => "Basic " + Base64.strict_encode64("upload-admin:bUild@uPloAD"),
-      "User-Agent" => "PostmanRuntime/7.32.3",
-      "Accept" => "*/*",
-      "Accept-Encoding" => "gzip, deflate, br",
-      "Connection" => "keep-alive"
+      "Content-Type" => "multipart/form-data; boundary=<calculated when request is sent>",
+#       "User-Agent" => "PostmanRuntime/7.32.3",
+#       "Accept" => "*/*",
+#       "Accept-Encoding" => "gzip, deflate, br",
+#       "Connection" => "keep-alive"
     }
 
     # Construct the headers string
