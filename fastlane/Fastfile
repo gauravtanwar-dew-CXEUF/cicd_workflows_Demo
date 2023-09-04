@@ -33,7 +33,7 @@ platform :android do
 
     # Print the APK path
      # Construct the path to the generated APK within your workspace
-     //apk_path = File.join(ENV['WORKSPACE'], 'app/build/outputs/apk/debug/app-debug.apk')
+#      apk_path = File.join(ENV['WORKSPACE'], 'app/build/outputs/apk/debug/app-debug.apk')
 
       apk_path = lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]
 
